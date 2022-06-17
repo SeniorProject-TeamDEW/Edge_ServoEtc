@@ -9,14 +9,15 @@ Servo servo;
 
 char*               ssid_pfix = (char*)"Edge_ServoLabel";
 
-unsigned long       lastPublishMillis = - pubInterval;
+//unsigned long       lastPublishMillis = - pubInterval;
 
 void publishData() {
     StaticJsonDocument<512> root;
     JsonObject data = root.createNestedObject("d");
 
 // USER CODE EXAMPLE : command handling
-    data["state"] = servo.read();
+    //String Casting
+    data["state"] = String(servo.read());
 // USER CODE EXAMPLE : command handling
 
     serializeJson(root, msgBuffer);
@@ -32,10 +33,10 @@ void handleUserCommand(JsonDocument* root) {
 
     if(d.containsKey("drive")) {
         if (!strcmp(d["drive"], "on")) {
-            servo.write(80); 
+            servo.write(120); 
             publishData();
-        }
-      lastPublishMillis = - pubInterval;
+        } 
+      //lastPublishMillis = - pubInterval;
     }
 
     if(d.containsKey("detect")) {
@@ -43,7 +44,7 @@ void handleUserCommand(JsonDocument* root) {
             servo.write(0); 
             publishData();
         } 
-      lastPublishMillis = - pubInterval;
+      //lastPublishMillis = - pubInterval;
     }
 
 // USER CODE EXAMPLE
@@ -91,9 +92,6 @@ void setup() {
     servo.attach(4);
     //initial servo setting
     servo.write(0);
-    servo.write(80);
-    servo.write(0);
-
     publishData();
 
 }
